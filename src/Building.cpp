@@ -581,12 +581,25 @@ void Building::get_citygml_lod1(std::wostream& of) {
       get_triangle_as_gml_surfacemember(of, t, true);
     if (_building_include_floor) {
       for (auto& t : _triangles) {
+        
         get_floor_triangle_as_gml_surfacemember(of, t, _height_base);
       }
     }
   }
   else {
-    get_extruded_lod1_block_gml(of, this->_p2, _height_top, _height_base, _building_include_floor);
+        std::cout << "get_extruded_lod1_block_gml is  : " << _height_top << "  " << _height_base << "  " << _building_include_floor << std::endl;
+
+        // Check if _height_top is more than 100, then adjust its value
+        double adjustedHeightTop = (_height_top > 100) ? _height_top / 100.0 : _height_top;
+
+        // Check if _height_base is more than 100, then adjust its value
+        double adjustedHeightBase = (_height_base > 100) ? _height_base / 100.0 : _height_base;
+
+        std::cout << "After dividing value  is  : " << adjustedHeightTop << "  " << adjustedHeightBase << std::endl;
+
+        get_extruded_lod1_block_gml(of, this->_p2, adjustedHeightTop, adjustedHeightBase, _building_include_floor);
+
+      
   }
   of << "</gml:CompositeSurface>";
   of << "</gml:exterior>";
